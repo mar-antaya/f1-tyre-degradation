@@ -56,3 +56,9 @@ Validation details are in [VALIDATION.md](VALIDATION.md). Downloaded data remain
 The embedded replay starts paused and uses the app's computed arrays. Play/Pause, Reset, speed and a keyboard-accessible timeline are available. Reduced motion defaults to the operating-system preference and can be enabled manually; manual stepping remains available. Motion is labeled as observed-sector, fitted, estimated or simulated playback and is never presented as live telemetry. `motion.py` validates lengths and finite numbers; `motion.html` renders without external libraries or network access.
 
 No API keys are needed for the public historical Jolpica/OpenF1 data or the local strategist. A provider authorization error is a data-access issue, not a requirement to invent an API key. FastF1 telemetry access remains dependent on its upstream service.
+
+## Current grid and historical laps
+
+The default driver selector includes the latest completed Grand Prix roster from a dated Jolpica snapshot. Kimi Antonelli is selectable even when he has no laps in the bundled 2024 Austin race. A driver without a sufficiently long clean stint gets an explicit no-data message and no fitted chart. This is not a claim about availability at other events.
+
+Use **Refresh current grid** (internet required), or run `python roster.py`, to update the roster. Failed refreshes preserve the saved snapshot. The latest-race roster may lag substitutions; its race and retrieval date are displayed. **Historical session** lists drivers present in the bundled laps. Updating the roster never changes the lap dataset, infers 2026 tire behavior, or substitutes another driver's measurements.

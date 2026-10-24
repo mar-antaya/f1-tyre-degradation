@@ -4,14 +4,39 @@ import plotly.graph_objects as go
 from ui import header,chart,footer,motion
 from data_io import read_laps,clean_laps
 from model import fit_stint
+from roster import read_roster,refresh_roster
 header('03','How long can we stay out?','Estimate within-stint tire degradation, then test how much the fuel assumption changes the answer.')
 st.info('FITTED ESTIMATE • Observed 2024 COTA race laps. A fitted slope is not a tire-only causal effect or a transferable 2026 coefficient.')
 try:raw=read_laps();clean=clean_laps(raw)
 except FileNotFoundError as e:st.error(str(e));st.stop()
 with st.sidebar:
-    driver=st.selectbox('Driver',sorted(clean.Driver.unique()),index=sorted(clean.Driver.unique()).index('LEC') if 'LEC' in clean.Driver.values else 0)
+    mode=st.radio('Driver list',['Current grid','Historical session'])
+    st.caption('Lap dataset: 2024 Austin • Race. Updating the roster does not update the lap data.')
+    if mode=='Current grid':
+        if st.button('Refresh current grid'):
+            try:
+                refresh_roster()
+                st.success('Roster refreshed from the latest completed Grand Prix.')
+            except Exception:
+                st.warning('Could not refresh the roster. Showing the saved, dated snapshot.')
+        roster=read_roster()
+        st.caption(f"Latest-race roster: {roster['season']} round {roster['round']} • {roster['race']}. Retrieved {roster['fetched_at'][:10]}. Substitutions after this race may not be reflected.")
+        names={x['code']:x['name'] for x in roster['drivers']}
+        codes=list(names)
+        driver=st.selectbox('Driver',codes,index=codes.index('LEC') if 'LEC' in codes else 0,
+                            format_func=lambda code:f'{names[code]} ({code})',key='current_driver')
+    else:
+        driver=st.selectbox('Driver',sorted(clean.Driver.unique()),key='historical_driver')
     choices=clean[clean.Driver==driver].groupby('Stint').filter(lambda x:len(x)>=6)
-    if choices.empty:st.warning('No sufficiently long clean stint');st.stop()
+if choices.empty:
+    name=names[driver] if mode=='Current grid' else driver
+    st.subheader(name)
+    st.warning('No measured stint available in the selected dataset: 2024 Austin race.')
+    st.write('This driver has no sufficiently long clean stint in this dataset. No tire-wear estimate or another driver’s curve is shown under their name. This does not mean they have no data in other sessions.')
+    st.info('Choose another driver, or switch to Historical session to explore the drivers in the bundled 2024 data.')
+    footer()
+    st.stop()
+with st.sidebar:
     stint=st.selectbox('Stint',sorted(choices.Stint.unique()))
     fuel=st.slider('Fuel gain per race lap (s)',0.,.12,.04,.005)
     trim=st.slider('Exclude first tire ages',0,5,2)
