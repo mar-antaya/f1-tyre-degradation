@@ -1,0 +1,5 @@
+fastf1==3.8.3
+streamlit==1.66.1
+plotly==6.9.0
+scipy==1.18.1
+pytest==9.1.1

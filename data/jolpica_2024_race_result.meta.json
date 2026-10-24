@@ -1,0 +1,5 @@
+{
+  "kind": "observed race classification",
+  "source": "https://api.jolpi.ca/ergast/f1/2024/circuits/americas/results.json?limit=100",
+  "verified_date": "2026-10-23"
+}

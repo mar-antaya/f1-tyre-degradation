@@ -1,0 +1,11 @@
+.venv/
+.cache/
+__pycache__/
+.pytest_cache/
+.DS_Store
+artifacts/
+
+.env
+.env.*
+!.env.example
+secrets.toml

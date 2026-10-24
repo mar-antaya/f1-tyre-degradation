@@ -1,0 +1,11 @@
+{
+  "kind": "observed OpenF1 timing; eligibility derived locally",
+  "source": "https://openf1.org/docs/",
+  "session_key": 9617,
+  "year": 2024,
+  "session": "R",
+  "fetched_at": "2026-10-23T11:49:17.751614+00:00",
+  "rows": 1059,
+  "eligible": 816,
+  "quality": "Sector consistency, pit/deletion exclusion, reconstructed flag intervals with SC restart buffer; see fetch_openf1.py."
+}
